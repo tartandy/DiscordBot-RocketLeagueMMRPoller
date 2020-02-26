@@ -44,15 +44,15 @@ public class Player {
         this.displayName = displayName;
     }
 
-    public void setRanks(int rankSolo, int rankDoubles, int rankStandard, int rankSoloStandard, int rankHoops, int rankRumble, int rankDropshot, int rankSnowday){
-        this.rankSolo = rankSolo;
-        this.rankDoubles = rankDoubles;
-        this.rankStandard = rankStandard;
-        this.rankSoloStandard = rankSoloStandard;
-        this.rankHoops = rankHoops;
-        this.rankRumble = rankRumble;
-        this.rankDropshot = rankDropshot;
-        this.rankSnowday = rankSnowday;
+    public void setRanks(int[] ranks){
+        this.rankSolo = ranks[0];
+        this.rankDoubles = ranks[1];
+        this.rankStandard = ranks[2];
+        this.rankSoloStandard = ranks[3];
+        this.rankHoops = ranks[4];
+        this.rankRumble = ranks[5];
+        this.rankDropshot = ranks[6];
+        this.rankSnowday = ranks[7];
     }
 
     public int getRankSolo() {
@@ -86,5 +86,22 @@ public class Player {
 
     public int getRankSnowday() {
         return rankSnowday;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "discordID='" + discordID + '\'' +
+                ", trackerURL='" + trackerURL + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", rankSolo=" + rankSolo +
+                ", rankDoubles=" + rankDoubles +
+                ", rankStandard=" + rankStandard +
+                ", rankSoloStandard=" + rankSoloStandard +
+                ", rankHoops=" + rankHoops +
+                ", rankRumble=" + rankRumble +
+                ", rankDropshot=" + rankDropshot +
+                ", rankSnowday=" + rankSnowday +
+                '}';
     }
 }
