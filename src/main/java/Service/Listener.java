@@ -2,6 +2,7 @@ package Service;
 
 import DAO.FileHandler;
 import Model.Player;
+import Model.Players;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -14,18 +15,21 @@ import java.util.ArrayList;
 public class Listener extends ListenerAdapter {
 
     private JDA jda;
-    private ArrayList<Player> players;
+    private Players players;
+
+    public Listener(){
+        players = new Players();
+    }
 
     public void setJDA(JDA jda) { this.jda = jda; }
-
 
     @Override
     public void onReady(@Nonnull ReadyEvent event) {
         //will load the players into arraylist
-        players = FileHandler.loadPlayers();
+        players.setPlayers(FileHandler.loadPlayers());
         //get MMR for each player
-        if(players != null) {
-            for (Player player : players) {
+        if(players.getPlayers() != null) {
+            for (Player player : players.getPlayers()) {
                 int[] ranks = FileHandler.getRankPageData(player.getTrackerURL());
                 if(ranks == null) System.out.println("Could not load player: " + player.getDisplayName() + "; " + player.getTrackerURL());
                 else player.setRanks(ranks);
