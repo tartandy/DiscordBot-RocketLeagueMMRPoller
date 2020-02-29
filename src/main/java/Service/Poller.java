@@ -11,7 +11,7 @@ public class Poller extends Thread{
 
     private JDA jda;
     private Players players;
-    private static final String[] displayGameMode = {"1v1", "2v2", "solo3s", "3v3", "Hoops", "Rumble", "Dropshot", "Snowday"};
+    private static final String[] displayGameMode = {"1v1\", \"2v2\", \"S3v3\", \"3v3\", \"Hoop\", \"Rmbl\", \"Drop\", \"Snow"};
 
     @Override
     public void run(){

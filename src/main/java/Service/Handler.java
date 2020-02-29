@@ -44,6 +44,7 @@ public class Handler extends Thread{
                     sendMessage(processLink(split));
                     break;
                 case "gamemode":
+                    sendMessage(processMode(split));
                     break;
                 case "help":
                     sendEmbed(processHelp());
@@ -109,7 +110,47 @@ public class Handler extends Thread{
     }
 
     private String processMode(String[] split) {
-        return null;
+        String[] ranks = {"1v1", "2v2", "solo3s", "3v3", "Hoops", "Rumble", "Dropshot", "Snowday"};
+        //check player exists first
+        synchronized (Players.getLock()){
+            if(!players.isPlayer(event.getAuthor().getId())) return "Please setup the poller first.";
+        }
+        //check command is correct length
+        if(split.length != 3) return "Bad command. See **!mmr help** for use.";
+        int gamemode;
+        switch (split[2]) {
+            case "1":
+                gamemode = 0;
+                break;
+            case "2":
+                gamemode = 1;
+                break;
+            case "3":
+                gamemode = 3;
+                break;
+            case "4":
+                gamemode = 2;
+                break;
+            case "5":
+                gamemode = 4;
+                break;
+            case "6":
+                gamemode = 5;
+                break;
+            case "7":
+                gamemode = 6;
+                break;
+            case "8":
+                gamemode = 7;
+                break;
+            default:
+                return "Error processing gamemode ID, use **!mmr help** for a list of IDs.";
+        }
+        synchronized (Players.getLock()){
+            players.setDisplayRank(event.getAuthor().getId(), gamemode);
+            FileHandler.storePlayers(players);
+        }
+        return "Preferred gamemode: **" + ranks[gamemode] + "** set!";
     }
 
     private MessageEmbed processHelp(){

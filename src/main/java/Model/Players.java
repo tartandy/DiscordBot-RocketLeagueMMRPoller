@@ -28,6 +28,14 @@ public class Players {
         }
     }
 
+    public void setDisplayRank(String id, int rank){
+        for (Player player : players){
+            if(player.getDiscordID().equals(id)){
+                player.setDisplayRank(rank);
+            }
+        }
+    }
+
     public void setLink(String id, String link){
         for (Player player : players){
             if(player.getDiscordID().equals(id)){
