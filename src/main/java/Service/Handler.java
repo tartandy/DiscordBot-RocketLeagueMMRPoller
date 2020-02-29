@@ -95,14 +95,15 @@ public class Handler extends Thread{
         //check link is correct number of args
         if(split.length != 3) return "Bad command. See **!mmr help** for use.";
         String link = split[2];
-        //if ranks pulled successfully, set link for player
+        //if ranks pulled successfully, set link for player and store in file
         if(FileHandler.getRankPageData(link) != null){
             synchronized (Players.getLock()){
                 players.setLink(event.getAuthor().getId(), link);
+                FileHandler.storePlayers(players);
             }
             return "Link valid, set!";
         } else {
-            return "Error processing link, make sure it's valid and try again";
+            return "Error processing link, make sure it's valid and try again.";
         }
 
     }
