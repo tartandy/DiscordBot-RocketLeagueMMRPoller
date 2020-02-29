@@ -26,10 +26,7 @@ public class Listener extends ListenerAdapter {
     @Override
     public void onReady(@Nonnull ReadyEvent event) {
         //will load the players into arraylist
-        //locking players class during load
-        synchronized (Players.getLock()){
-            players.setPlayers(FileHandler.loadPlayers());
-        }
+        players.setPlayers(FileHandler.loadPlayers());
         //start poller in new thread
         Poller poller = new Poller();
         poller.setJDA(jda);
@@ -47,7 +44,7 @@ public class Listener extends ListenerAdapter {
         if (event.getAuthor().isBot()) return;
         if (!msg.isFromGuild()) return;
         //creates the handler to check for commands on a new thread
-        Handler handler = new Handler(event, jda);
+        Handler handler = new Handler(event, jda, players);
         handler.start();
     }
 }

@@ -63,18 +63,6 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player{" +
-                "discordID='" + discordID + '\'' +
-                ", trackerURL='" + trackerURL + '\'' +
-                ", displayName='" + displayName + '\'' +
-                ", rankSolo=" + ranks[0] +
-                ", rankDoubles=" + ranks[1] +
-                ", rankStandard=" + ranks[2] +
-                ", rankSoloStandard=" + ranks[3] +
-                ", rankHoops=" + ranks[4] +
-                ", rankRumble=" + ranks[5] +
-                ", rankDropshot=" + ranks[6] +
-                ", rankSnowday=" + ranks[8] +
-                '}';
+        return discordID + "," + trackerURL + "," + displayName + "," + displayRank + "," + guildID;
     }
 }

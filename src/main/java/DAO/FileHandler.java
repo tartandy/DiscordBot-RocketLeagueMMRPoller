@@ -1,6 +1,7 @@
 package DAO;
 
 import Model.Player;
+import Model.Players;
 
 import java.io.*;
 import java.net.URL;
@@ -31,7 +32,6 @@ public class FileHandler {
         String fn = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "BotData"
                 + File.separator + "players.txt";
         String line;
-
         try {
             //open connection to file if one exists, otherwise exit
             File file = new File(fn);
@@ -53,6 +53,38 @@ public class FileHandler {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static boolean storePlayers(Players players){
+        String fn = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "BotData"
+                + File.separator + "players.txt";
+        String output;
+        //build file to string
+        StringBuilder outputBuilder = new StringBuilder();
+        for (Player player : players.getPlayers()) {
+            outputBuilder.append(player.toString()).append("\n");
+        }
+        output = outputBuilder.toString().trim();
+        File file = new File(fn);
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        //write to file
+        try {
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(output);
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public static int[] getRankPageData(String linkText) {
