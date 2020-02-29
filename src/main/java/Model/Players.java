@@ -28,6 +28,14 @@ public class Players {
         }
     }
 
+    public void setLink(String id, String link){
+        for (Player player : players){
+            if(player.getDiscordID().equals(id)){
+                player.setTrackerURL(link);
+            }
+        }
+    }
+
     public boolean isPlayer(String id){
         for (Player player : players){
             if(player.getDiscordID().equals(id)){
