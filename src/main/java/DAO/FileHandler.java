@@ -45,7 +45,7 @@ public class FileHandler {
             //for each line, load new player and add to ArrayList
             while((line = br.readLine()) != null ){
                 String[] split = line.split(",");
-                Player player = new Player(split[0],split[1],split[2]);
+                Player player = new Player(split[0],split[1],split[2], Integer.parseInt(split[3]), split[4]);
                 players.add(player);
             }
             return players;
@@ -56,7 +56,6 @@ public class FileHandler {
     }
 
     public static int[] getRankPageData(String linkText) {
-        System.out.println("Attempting to load: " + linkText);
         URL url;
         InputStream is = null;
         BufferedReader br;

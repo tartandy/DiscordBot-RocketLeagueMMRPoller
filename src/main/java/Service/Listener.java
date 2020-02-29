@@ -26,15 +26,15 @@ public class Listener extends ListenerAdapter {
     @Override
     public void onReady(@Nonnull ReadyEvent event) {
         //will load the players into arraylist
-        players.setPlayers(FileHandler.loadPlayers());
-        //get MMR for each player
-        if(players.getPlayers() != null) {
-            for (Player player : players.getPlayers()) {
-                int[] ranks = FileHandler.getRankPageData(player.getTrackerURL());
-                if(ranks == null) System.out.println("Could not load player: " + player.getDisplayName() + "; " + player.getTrackerURL());
-                else player.setRanks(ranks);
-            }
+        //locking players class during load
+        synchronized (Players.getLock()){
+            players.setPlayers(FileHandler.loadPlayers());
         }
+        //start poller in new thread
+        Poller poller = new Poller();
+        poller.setJDA(jda);
+        poller.setPlayers(players);
+        //poller.start();
     }
 
     @Override
@@ -46,7 +46,6 @@ public class Listener extends ListenerAdapter {
         Message msg = event.getMessage();
         if (event.getAuthor().isBot()) return;
         if (!msg.isFromGuild()) return;
-
         //creates the handler to check for commands on a new thread
         Handler handler = new Handler(event, jda);
         handler.start();

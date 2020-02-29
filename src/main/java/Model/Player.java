@@ -5,19 +5,16 @@ public class Player {
     private String discordID;
     private String trackerURL;
     private String displayName;
-    private int rankSolo;
-    private int rankDoubles;
-    private int rankStandard;
-    private int rankSoloStandard;
-    private int rankHoops;
-    private int rankRumble;
-    private int rankDropshot;
-    private int rankSnowday;
+    private String guildID;
+    private int[] ranks;
+    private int displayRank;
 
-    public Player(String discordID, String trackerURL, String displayName) {
+    public Player(String discordID, String trackerURL, String displayName, int displayRank, String guildID) {
         this.discordID = discordID;
         this.trackerURL = trackerURL;
         this.displayName = displayName;
+        this.displayRank = displayRank;
+        this.guildID = guildID;
     }
 
     public String getDiscordID() {
@@ -44,48 +41,24 @@ public class Player {
         this.displayName = displayName;
     }
 
+    public int getDisplayRank() {
+        return displayRank;
+    }
+
+    public void setDisplayRank(int displayRank) {
+        this.displayRank = displayRank;
+    }
+
     public void setRanks(int[] ranks){
-        this.rankSolo = ranks[0];
-        this.rankDoubles = ranks[1];
-        this.rankStandard = ranks[2];
-        this.rankSoloStandard = ranks[3];
-        this.rankHoops = ranks[4];
-        this.rankRumble = ranks[5];
-        this.rankDropshot = ranks[6];
-        this.rankSnowday = ranks[7];
+        this.ranks = ranks;
     }
 
-    public int getRankSolo() {
-        return rankSolo;
+    public int[] getRanks(){
+        return ranks;
     }
 
-
-    public int getRankDoubles() {
-        return rankDoubles;
-    }
-
-    public int getRankStandard() {
-        return rankStandard;
-    }
-
-    public int getRankSoloStandard() {
-        return rankSoloStandard;
-    }
-
-    public int getRankHoops() {
-        return rankHoops;
-    }
-
-    public int getRankRumble() {
-        return rankRumble;
-    }
-
-    public int getRankDropshot() {
-        return rankDropshot;
-    }
-
-    public int getRankSnowday() {
-        return rankSnowday;
+    public String getGuildID() {
+        return guildID;
     }
 
     @Override
@@ -94,14 +67,14 @@ public class Player {
                 "discordID='" + discordID + '\'' +
                 ", trackerURL='" + trackerURL + '\'' +
                 ", displayName='" + displayName + '\'' +
-                ", rankSolo=" + rankSolo +
-                ", rankDoubles=" + rankDoubles +
-                ", rankStandard=" + rankStandard +
-                ", rankSoloStandard=" + rankSoloStandard +
-                ", rankHoops=" + rankHoops +
-                ", rankRumble=" + rankRumble +
-                ", rankDropshot=" + rankDropshot +
-                ", rankSnowday=" + rankSnowday +
+                ", rankSolo=" + ranks[0] +
+                ", rankDoubles=" + ranks[1] +
+                ", rankStandard=" + ranks[2] +
+                ", rankSoloStandard=" + ranks[3] +
+                ", rankHoops=" + ranks[4] +
+                ", rankRumble=" + ranks[5] +
+                ", rankDropshot=" + ranks[6] +
+                ", rankSnowday=" + ranks[8] +
                 '}';
     }
 }
