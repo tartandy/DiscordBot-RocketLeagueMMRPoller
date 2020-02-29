@@ -53,6 +53,10 @@ public class Players {
         return false;
     }
 
+    public void addPlayer(Player player){
+        players.add(player);
+    }
+
     public void setPlayers(ArrayList<Player> players) {
             this.players = players;
     }

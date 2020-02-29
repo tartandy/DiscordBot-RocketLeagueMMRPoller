@@ -49,11 +49,50 @@ public class Handler extends Thread{
                 case "help":
                     sendEmbed(processHelp());
                     break;
+                case "setup":
+                    sendMessage(processSetup(split));
+                    break;
                 default:
                     sendMessage("Bad command. See **!mmr help** for use.");
                     break;
             }
         }
+    }
+
+    private String processSetup(String[] split) {
+        //check player doesn't exist first
+        synchronized (Players.getLock()){
+            if(players.isPlayer(event.getAuthor().getId())) return "You've already completed setup.";
+        }
+        sendTyping();
+        //get discord IDs
+        String guildID = event.getGuild().getId();
+        String discordID = event.getAuthor().getId();
+        //must have at least 4 args
+        if(split.length < 4) return "Bad command. See **!mmr help** for use.";
+        //process link is valid first
+        String link = split[2];
+        //if ranks pulled successfully, set link for player and store in file
+        if(FileHandler.getRankPageData(link) == null){
+            return "Error processing link, make sure it's valid and try again.";
+        }
+
+        //build nickname from remaining args
+        StringBuilder nickname = new StringBuilder();
+        for(int i = 3; i < split.length; i++){
+            nickname.append(split[i]).append(" ");
+        }
+        //get name as string, check name is valid length
+        String name = nickname.toString().trim();
+        name = name.replace(",", "");
+        if(name.length() > 18) return "Error: name must not exceed 18 characters.";
+        if(name.length() == 0) return "Error: name cannot be empty.";
+        Player player = new Player(discordID, link, name, 3, guildID);
+        synchronized (Players.getLock()){
+            players.addPlayer(player);
+            FileHandler.storePlayers(players);
+        }
+        return "Player setup successfully!";
     }
 
     private void sendTyping() {
@@ -63,7 +102,6 @@ public class Handler extends Thread{
     private void sendEmbed(MessageEmbed embed) {
         event.getMessage().getChannel().sendMessage(embed).queue();
     }
-
 
     private void sendMessage(String message){
         event.getMessage().getChannel().sendMessage(message).queue();
@@ -110,7 +148,7 @@ public class Handler extends Thread{
     }
 
     private String processMode(String[] split) {
-        String[] ranks = {"1v1", "2v2", "solo3s", "3v3", "Hoops", "Rumble", "Dropshot", "Snowday"};
+        String[] ranks = {"Solo", "Doubles", "Solo Standard", "Standard", "Hoops", "Rumble", "Dropshot", "Snowday"};
         //check player exists first
         synchronized (Players.getLock()){
             if(!players.isPlayer(event.getAuthor().getId())) return "Please setup the poller first.";

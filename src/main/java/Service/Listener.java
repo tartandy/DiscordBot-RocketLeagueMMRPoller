@@ -31,7 +31,7 @@ public class Listener extends ListenerAdapter {
         Poller poller = new Poller();
         poller.setJDA(jda);
         poller.setPlayers(players);
-        //poller.start();
+        poller.start();
     }
 
     @Override
