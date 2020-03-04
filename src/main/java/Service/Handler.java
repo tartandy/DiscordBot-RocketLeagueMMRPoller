@@ -124,14 +124,15 @@ public class Handler extends Thread{
         synchronized (Players.getLock()){
             players.setNickname(event.getAuthor().getId(), nickname);
             FileHandler.storePlayers(players);
-            setNickname(nickname, players.getPlayer(event.getAuthor().getId()));
+            setNickname(players.getPlayer(event.getAuthor().getId()));
         }
         return "Nickname **" + nickname + "** set!";
     }
 
-    private void setNickname(String nickname, Player player) {
+    private void setNickname(Player player) {
         //Below would be where setting names would occur
         try{
+            System.out.println("gonna set nickname for: " + player.getDisplayName());
             Guild guild = jda.getGuildById(player.getGuildID());
             assert guild != null;
             Member member = guild.getMemberById(player.getDiscordID());
@@ -160,6 +161,7 @@ public class Handler extends Thread{
             synchronized (Players.getLock()){
                 players.setLink(event.getAuthor().getId(), link);
                 FileHandler.storePlayers(players);
+                setNickname(players.getPlayer(event.getAuthor().getId()));
             }
             return "Link valid, set!";
         } else {
@@ -208,6 +210,7 @@ public class Handler extends Thread{
         synchronized (Players.getLock()){
             players.setDisplayRank(event.getAuthor().getId(), gamemode);
             FileHandler.storePlayers(players);
+            setNickname(players.getPlayer(event.getAuthor().getId()));
         }
         return "Preferred gamemode: **" + ranks[gamemode] + "** set!";
     }
