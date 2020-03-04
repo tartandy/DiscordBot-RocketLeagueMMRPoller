@@ -6,8 +6,11 @@ import Model.Players;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.awt.*;
 
@@ -17,6 +20,7 @@ public class Handler extends Thread{
     private JDA jda;
     private final String prefix = "!mmr";
     private Players players;
+    private static final String[] displayGameMode = {"1v1", "2v2", "S3v3", "3v3", "Hoop", "Rmbl", "Drop", "Snow"};
 
     public Handler(MessageReceivedEvent event, JDA jda, Players players){
         this.event = event;
@@ -120,8 +124,25 @@ public class Handler extends Thread{
         synchronized (Players.getLock()){
             players.setNickname(event.getAuthor().getId(), nickname);
             FileHandler.storePlayers(players);
+            setNickname(nickname, players.getPlayer(event.getAuthor().getId()));
         }
         return "Nickname **" + nickname + "** set!";
+    }
+
+    private void setNickname(String nickname, Player player) {
+        //Below would be where setting names would occur
+        try{
+            Guild guild = jda.getGuildById(player.getGuildID());
+            assert guild != null;
+            Member member = guild.getMemberById(player.getDiscordID());
+            assert member != null;
+            member.modifyNickname(player.getRanks()[player.getDisplayRank()]
+                    + " (" + displayGameMode[player.getDisplayRank()] + ") | " + player.getDisplayName()).queue();
+        } catch(PermissionException e){
+            //can't change owner nickname
+        } catch (NullPointerException e){
+            System.out.println("Null pointer exception trying to set nickname. Is the bot kicked from the guild?");
+        }
     }
 
     private String processLink(String[] split){

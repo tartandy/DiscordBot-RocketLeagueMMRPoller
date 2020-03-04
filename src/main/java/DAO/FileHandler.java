@@ -128,29 +128,44 @@ public class FileHandler {
         tmpData = tmpData.replace("\n\n\n", "\n");
         tmpData = tmpData.trim();
 
-        //split text and parse each phase to get rank
+        //split lines to get each rank
         String[] rankLine = tmpData.split("\n");
-        for (int i = 0; i < rankLine.length; i++) {
-            rankLine[i] = parseRankLine(rankLine[i]);
-        }
-        //remove unranked MMR
-        rankLine = Arrays.copyOfRange(rankLine,1,9);
-        //convert to int and return
         int[] ranks = new int[8];
-        for(int i = 0; i < ranks.length ; i++){
-            ranks[i] = Integer.parseInt(rankLine[i]);
+        //give default value of 0 incase rank data missing
+        Arrays.fill(ranks, 0);
+
+        //for each line, populate rank data
+        for(String s : rankLine){
+            int mode;
+            if((mode = getGamemode(s)) != -1){
+                System.out.println(s);
+                ranks[mode] = parseRankLine(s);
+            }
         }
         return ranks;
     }
 
-    private static String parseRankLine(String input) {
-        //parses the rank line to get the rank from the string
+    private static int getGamemode(String line){
+        //get the gamemode and return its corresponding index in ranks[]
+        String[] modes = {"1v1", "2v2", "Solo Standard", "Standard 3v3", "Hoop", "Rumble", "Dropshot", "Snowday"};
+        for(int i = 0; i < 8; i++){
+            if(line.contains(modes[i])){
+                return i;
+            }
+        }
+        //returns if unranked mode
+        return -1;
+    }
 
+    private static int parseRankLine(String input) {
+        //parses the rank line to get the rank from the string
         //get the list of rank numbers
         input = input.replace(" ", "");
-        input = input.substring(input.indexOf("["),input.indexOf("]"));
+        input = input.substring(input.indexOf("[")+1,input.indexOf("]"));
         //split out all the ranks and get the last one
         String[] ranks = input.split(",");
-        return ranks[ranks.length-1];
+        System.out.println(ranks[ranks.length-1]);
+        if(ranks[ranks.length-1].isEmpty()) return 0;
+        return Integer.parseInt(ranks[ranks.length-1]);
     }
 }

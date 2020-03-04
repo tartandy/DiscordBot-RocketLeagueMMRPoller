@@ -4,6 +4,7 @@ import DAO.FileHandler;
 import Model.Player;
 import Model.Players;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Invite;
@@ -29,11 +30,21 @@ public class Poller extends Thread{
             synchronized (Players.getLock()){
                 if(players.getPlayers() != null) {
                     for (Player player : players.getPlayers()) {
-                        int[] ranks = FileHandler.getRankPageData(player.getTrackerURL());
-                        if(ranks == null) System.out.println("Could not load player: " + player.getDisplayName() + "; " + player.getTrackerURL());
-                        else{
-                            player.setRanks(ranks);
-                            setNickName(player);
+                        try{
+                            //check member is online, otherwise skip
+                            Member member = Objects.requireNonNull(jda.getGuildById(player.getGuildID())).getMemberById(player.getDiscordID());
+                            assert member != null;
+                            if(member.getOnlineStatus() == OnlineStatus.ONLINE || true){
+                                int[] ranks = FileHandler.getRankPageData(player.getTrackerURL());
+                                if(ranks == null) System.out.println("Could not load player: " + player.getDisplayName() + "; " + player.getTrackerURL());
+                                else{
+                                    player.setRanks(ranks);
+                                    setNickName(player);
+                                }
+                            }
+
+                        }catch(NullPointerException e){
+                            System.out.println("Player " + player.getDisplayName() + " caused null error. perhaps left the server?");
                         }
                     }
                 }

@@ -60,4 +60,13 @@ public class Players {
     public void setPlayers(ArrayList<Player> players) {
             this.players = players;
     }
+
+    public Player getPlayer(String id) {
+        for(Player player : players) {
+            if(player.getDiscordID().equals(id)){
+                return player;
+            }
+        }
+        return null;
+    }
 }
